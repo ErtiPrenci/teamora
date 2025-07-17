@@ -1,27 +1,31 @@
 FROM php:8.2-apache
 
-# Install required extensions and tools
+# Install system dependencies and PHP extensions
 RUN apt-get update && apt-get install -y \
     git unzip zip curl libzip-dev libpng-dev libonig-dev libxml2-dev \
     && docker-php-ext-install pdo pdo_mysql zip gd
 
-# Enable Apache mod_rewrite for Laravel routing
+# Enable Apache mod_rewrite
 RUN a2enmod rewrite
 
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy Laravel files
+# Copy app files
 COPY . .
 
 # Install Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN curl -sS https://getcomposer.org/installer | php \
+    && mv composer.phar /usr/local/bin/composer
 
 # Install Laravel dependencies
-RUN composer install --optimize-autoloader --no-dev
+RUN composer install --no-dev --optimize-autoloader
 
-# Fix permissions
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+# Set permissions
+RUN chown -R www-data:www-data storage bootstrap/cache
 
 # Expose port
 EXPOSE 80
+
+# Start Apache
+CMD ["apache2-foreground"]
