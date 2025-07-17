@@ -1,9 +1,11 @@
 FROM php:8.2-apache
 
 # Install PHP dependencies
+# Install PHP extensions and system dependencies
 RUN apt-get update && apt-get install -y \
-    unzip zip curl git libzip-dev libpng-dev libonig-dev libxml2-dev \
-    && docker-php-ext-install pdo pdo_mysql zip gd bcmath
+    unzip zip curl git libzip-dev libpng-dev libonig-dev libxml2-dev libicu-dev \
+    && docker-php-ext-install pdo pdo_mysql zip gd bcmath intl
+
 
 
 # Enable Apache mod_rewrite
