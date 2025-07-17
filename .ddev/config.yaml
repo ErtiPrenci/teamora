@@ -14,10 +14,7 @@ composer_version: "2"
 web_environment: []
 corepack_enable: false
 default_container_timeout: "240"
-router_http_port: "80"
-router_https_port: "443"
-additional_hostnames:
-  - teamora.local
+
 
 # Key features of DDEV's config.yaml:
 
